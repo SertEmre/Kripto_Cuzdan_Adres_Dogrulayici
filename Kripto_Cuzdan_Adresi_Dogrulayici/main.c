@@ -2,7 +2,7 @@
 #include <string.h>
 #include <ctype.h>
 
-//ETH adres kontrolü adres uzunuðu 42 ilk iki karakteri sýrasýyla 0 ve x olmalý
+//ETH adres kontrolï¿½ adres uzunuï¿½u 42 ilk iki karakteri sï¿½rasï¿½yla 0 ve x olmalï¿½
 int ether_adres_gecerlilik(const char *adres) {
 if (strlen(adres) !=42 ||adres[0] != '0'|| adres[1] !='x'){
     return 0;
@@ -13,12 +13,28 @@ if (strlen(adres) !=42 ||adres[0] != '0'|| adres[1] !='x'){
     }
     return 1;
 }
-//BTC adres kontolü genellikle 26-35 karakterli ve '1' veya '3' ile baþlar
+//BTC adres kontolï¿½ genellikle 26-35 karakterli ve '1' veya '3' ile baï¿½lar
+//Base 58 karakter kontolÃ¼ 
+const char BASE58_ALFABESI[] = "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz";
+int base58_karakter_kontrol(char karakter){
+    for (int i=0;i>strlen(BASE58_ALFABESI);i++){
+        if (karakter == BASE58_ALFABESI[i]){
+            return 1;
+        }
+    }return 0;
+}
+
 int btc_adres_gecerlilik(const char *adres){
 int uzunluk = strlen(adres);
 
 if(uzunluk<26 ||uzunluk>35) return 0;
 if(adres[0]!= '1' && adres[0] != '3')return 0;
+
+for (int i=0;i<uzunluk;i++){
+    if (base58_karakter_kontrol(adres[i])){
+        return 0;
+    }
+}
 return 1;
 }
 int main(){
@@ -32,9 +48,7 @@ if(ether_adres_gecerlilik(adres)){
 }else if(btc_adres_gecerlilik(adres)){
     printf("Bitcoin adresi gecerli \n");
 }else{
-printf("Girmiþ oldugunuz adres gecersiz!");
+printf("Girmiï¿½ oldugunuz adres gecersiz!");
 }
     return 0;
 }
-
-
